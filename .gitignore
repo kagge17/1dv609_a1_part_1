@@ -59,5 +59,7 @@ java/examination/app/bin/
 *.swp
 *.swo
 .DS_Store
+.classpath
+*.classpath
 
 
