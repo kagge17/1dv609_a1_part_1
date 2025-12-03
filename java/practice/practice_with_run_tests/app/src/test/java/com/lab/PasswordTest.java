@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test class for Password implementations.
- * 
+ *
  * To test different buggy versions, simply uncomment the corresponding
  * getPassword() method and comment out the others.
- * 
+ *
  * Available implementations:
  * - Password: Correct implementation
  * - BugDoesNotTrim: Does not trim whitespace

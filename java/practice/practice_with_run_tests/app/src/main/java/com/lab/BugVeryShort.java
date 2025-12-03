@@ -14,7 +14,7 @@ public class BugVeryShort implements IPassword {
         }
         this.passwordHash = simpleHash(trimmedPW);
     }
-    
+
     private int simpleHash(String input) {
         int hash = 7;
         for (int i = 0; i < input.length(); i++) {
@@ -22,19 +22,19 @@ public class BugVeryShort implements IPassword {
         }
         return hash;
     }
-    
+
     private boolean isToShort(String pw) {
         return pw.length() < 6;  // Bug: wrong minimum length
     }
-    
+
     private boolean containsNumber(String text) {
         return text.matches(".*\\d.*");
     }
-    
+
     public int getPasswordHash() {
         return this.passwordHash;
     }
-    
+
     public boolean isPasswordSame(IPassword other) {
         return this.passwordHash == other.getPasswordHash();
     }
