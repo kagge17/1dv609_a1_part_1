@@ -61,5 +61,5 @@ java/examination/app/bin/
 .DS_Store
 .classpath
 *.classpath
-
+.project
 
