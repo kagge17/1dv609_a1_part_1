@@ -40,4 +40,74 @@ public class PasswordTest {
     public void shouldAlwaysPass() throws Exception {
         assertTrue(true);
     }
+
+    @Test
+    public void whitespacePasswordShouldBeTrimmed() throws Exception {
+        IPassword spaceP = getPassword(" password1234 ");
+        IPassword trimP = getPassword("password1234");
+
+        assertTrue(trimP.isPasswordSame(spaceP));
+    }
+
+    @Test
+    public void shortPasswordShouldThrowException() {
+        String tooShort = "password123";
+
+        assertThrows(Exception.class, () -> {
+            IPassword p = getPassword(tooShort);
+        });
+    }
+
+    @Test
+    public void shortPasswordShouldThrowExpectedExceptionMessage() {
+        String tooShort = "password123";
+
+        Exception e = assertThrows(Exception.class, () -> {
+            IPassword p = getPassword(tooShort);
+        });
+        assertEquals("To short password", e.getMessage());
+    }
+
+    @Test
+    public void noNumberPasswordShouldThrowException() {
+        String letters = "password!!!!";
+
+        assertThrows(Exception.class, () -> {
+            IPassword p = getPassword(letters);
+        });
+    }
+
+    @Test
+    public void noNumberPasswordShouldThrowExpectedExceptionMessage() {
+        String noNumber = "password!!!!";
+
+        Exception e = assertThrows(Exception.class, () -> {
+            IPassword p = getPassword(noNumber);
+        });
+        assertEquals("Does not contain a number", e.getMessage());
+    }
+
+    @Test
+    public void passwordShouldReturnExpectedHash() throws Exception {
+        int expected = -1487852828;
+        IPassword p = getPassword("password1234");
+
+        assertEquals(expected, p.getPasswordHash());
+    }
+
+    @Test
+    public void samePasswordShouldReturnTrue() throws Exception {
+        IPassword p1 = getPassword("password1234");
+        IPassword p2 = getPassword("password1234");
+
+        assertTrue(p1.isPasswordSame(p2));
+    }
+
+    @Test
+    public void differentPasswordsShouldReturnFalse() throws Exception {
+        IPassword p1 = getPassword("password1234");
+        IPassword p2 = getPassword("password1235");
+
+        assertFalse(p1.isPasswordSame(p2));
+    }
 }
