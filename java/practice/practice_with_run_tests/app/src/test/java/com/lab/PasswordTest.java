@@ -2,6 +2,8 @@ package com.lab;
 
 import org.junit.jupiter.api.Test;
 
+import com.MyBuggy;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -32,7 +34,8 @@ public class PasswordTest {
         // return (IPassword) new BugMissingPasswordLengthCheck(s);
         // return (IPassword) new BugMissingNumberCheck(s);
         // return (IPassword) new BugIsPasswordSameAlwaysTrue(s);
-        return (IPassword) new BugWrongHashingAlgorithm(s);
+        // return (IPassword) new BugWrongHashingAlgorithm(s);
+        return (IPassword) new MyBuggy(s);
     }
 
     @Test
