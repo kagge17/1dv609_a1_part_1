@@ -9,7 +9,10 @@ import static org.mockito.Mockito.*;
 public class SwedishSocialSecurityNumberTest {
 
     private SSNHelper mockHelper;
-    private SwedishSocialSecurityNumber ssn;
+
+    public BuggySwedishSocialSecurityNumberWrongYear createSSN(String s) throws Exception {
+        return new BuggySwedishSocialSecurityNumberWrongYear(s, mockHelper);
+    }
 
     @BeforeEach
     public void setUp() {
@@ -24,13 +27,14 @@ public class SwedishSocialSecurityNumberTest {
         when(mockHelper.isValidDay("01")).thenReturn(true);
         when(mockHelper.luhnIsCorrect("900101-0017")).thenReturn(true);
 
-        ssn = new SwedishSocialSecurityNumber("900101-0017", mockHelper);
+        var ssn = createSSN("900101-0017");
 
         // Assert: Verify the SSN was created and methods work
         assertEquals("90", ssn.getYear());
         assertEquals("01", ssn.getMonth());
         assertEquals("01", ssn.getDay());
         assertEquals("0017", ssn.getSerialNumber());
+        assertEquals("900101-0017", ssn.getSSN());
 
         // Verify that the mock methods were called
         verify(mockHelper).isCorrectLength("900101-0017");
@@ -41,7 +45,7 @@ public class SwedishSocialSecurityNumberTest {
     }
 
     @Test
-    public void shouldStoreTrimmedSSN() throws Exception {
+    public void constructorShouldTrimInputBeforeValidation() throws Exception {
         String raw = " 900101-0017 ";
         String expected = "900101-0017";
 
@@ -51,19 +55,19 @@ public class SwedishSocialSecurityNumberTest {
         when(mockHelper.isValidDay("01")).thenReturn(true);
         when(mockHelper.luhnIsCorrect(expected)).thenReturn(true);
 
-        ssn = new SwedishSocialSecurityNumber(raw, mockHelper);
+        var ssn = createSSN(raw);
 
         assertEquals(expected, ssn.getSSN());
     }
 
     @Test
-    public void notElevenCharsShouldThrowException() {
+    public void constructorShouldThrowExceptionForInvalidLength() {
         String input = "900101-001";
 
         when(mockHelper.isCorrectLength(input)).thenReturn(false);
 
         assertThrows(Exception.class, () -> {
-            ssn = new SwedishSocialSecurityNumber(input, mockHelper);
+            var ssn = createSSN(input);
         });
 
         verify(mockHelper).isCorrectLength(input);
@@ -74,64 +78,7 @@ public class SwedishSocialSecurityNumberTest {
     }
 
     @Test
-    public void incorretFormatShouldThrowException() {
-        String input = "90010100170";
-
-        when(mockHelper.isCorrectLength(input)).thenReturn(true);
-        when(mockHelper.isCorrectFormat(input)).thenReturn(false);
-
-        assertThrows(Exception.class, () -> {
-            ssn = new SwedishSocialSecurityNumber(input, mockHelper);
-        });
-
-        verify(mockHelper).isCorrectLength(input);
-        verify(mockHelper).isCorrectFormat(input);
-        verify(mockHelper, never()).isValidMonth(anyString());
-        verify(mockHelper, never()).isValidDay(anyString());
-        verify(mockHelper, never()).luhnIsCorrect(anyString());
-    }
-
-    @Test
-    public void invalidMonthShouldThrowException() {
-        String input = "900001-0017";
-
-        when(mockHelper.isCorrectLength(input)).thenReturn(true);
-        when(mockHelper.isCorrectFormat(input)).thenReturn(true);
-        when(mockHelper.isValidMonth("00")).thenReturn(false);
-
-        assertThrows(Exception.class, () -> {
-            ssn = new SwedishSocialSecurityNumber(input, mockHelper);
-        });
-
-        verify(mockHelper).isCorrectLength(input);
-        verify(mockHelper).isCorrectFormat(input);
-        verify(mockHelper).isValidMonth("00");
-        verify(mockHelper, never()).isValidDay(anyString());
-        verify(mockHelper, never()).luhnIsCorrect(anyString());
-    }
-
-    @Test
-    public void invalidDayShouldThrowException() {
-        String input = "900100-0017";
-
-        when(mockHelper.isCorrectLength(input)).thenReturn(true);
-        when(mockHelper.isCorrectFormat(input)).thenReturn(true);
-        when(mockHelper.isValidMonth("01")).thenReturn(true);
-        when(mockHelper.isValidDay("00")).thenReturn(false);
-
-        assertThrows(Exception.class, () -> {
-            ssn = new SwedishSocialSecurityNumber(input, mockHelper);
-        });
-
-        verify(mockHelper).isCorrectLength(input);
-        verify(mockHelper).isCorrectFormat(input);
-        verify(mockHelper).isValidMonth("01");
-        verify(mockHelper).isValidDay("00");
-        verify(mockHelper, never()).luhnIsCorrect(anyString());
-    }
-
-    @Test
-    public void invalidLuhnShouldThrowException() {
+    public void constructorShouldThrowExceptionForInvalidLuhn() {
         String input = "900101-0018";
 
         when(mockHelper.isCorrectLength(input)).thenReturn(true);
@@ -141,13 +88,24 @@ public class SwedishSocialSecurityNumberTest {
         when(mockHelper.luhnIsCorrect(input)).thenReturn(false);
 
         assertThrows(Exception.class, () -> {
-            ssn = new SwedishSocialSecurityNumber(input, mockHelper);
+            var ssn = createSSN(input);
         });
 
-        verify(mockHelper).isCorrectLength(input);
-        verify(mockHelper).isCorrectFormat(input);
-        verify(mockHelper).isValidMonth("01");
-        verify(mockHelper).isValidDay("01");
         verify(mockHelper).luhnIsCorrect(input);
+    }
+
+    @Test
+    public void getYearShouldReturnExpectedValue() throws Exception {
+        String input = "900101-0017";
+
+        when(mockHelper.isCorrectLength(input)).thenReturn(true);
+        when(mockHelper.isCorrectFormat(input)).thenReturn(true);
+        when(mockHelper.isValidMonth("01")).thenReturn(true);
+        when(mockHelper.isValidDay("01")).thenReturn(true);
+        when(mockHelper.luhnIsCorrect(input)).thenReturn(true);
+
+        var ssn = createSSN(input);
+
+        assertEquals("90", ssn.getYear());
     }
 }

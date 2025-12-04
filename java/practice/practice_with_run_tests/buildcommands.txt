@@ -1,0 +1,2 @@
+gradle clean test --tests "com.lab.SwedishSocialSecurityNumberTest" jacocoTestReport
+gradle clean test --tests "com.lab.SSNHelperTest" jacocoTestReport

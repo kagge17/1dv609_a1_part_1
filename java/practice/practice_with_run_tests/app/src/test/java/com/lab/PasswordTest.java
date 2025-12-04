@@ -44,7 +44,7 @@ public class PasswordTest {
     }
 
     @Test
-    public void shouldTrimWhitespace() throws Exception {
+    public void constructorShouldTrimWhitespace() throws Exception {
         IPassword p1 = getPassword("  password1234 ");
         IPassword p2 = getPassword("password1234");
 
@@ -52,27 +52,27 @@ public class PasswordTest {
     }
 
     @Test
-    public void shouldThrowExceptionForMissingNumber() {
+    public void constructorShouldThrowExceptionForMissingNumber() {
         assertThrows(Exception.class, () -> getPassword("password!!!!"));
     }
 
     @Test
-    public void shouldThrowExceptionFor11CharPassword() {
+    public void constructorShouldThrowExceptionFor11CharPassword() {
         assertThrows(Exception.class, () -> getPassword("password123"));
     }
 
     @Test
-    public void shouldThrowExceptionFor5CharPassword() {
+    public void constructorShouldThrowExceptionFor5CharPassword() {
         assertThrows(Exception.class, () -> getPassword("pass12"));
     }
 
     @Test
-    public void shouldThrowExceptionForEmptyPassword() {
+    public void constructorShouldThrowExceptionForEmptyPassword() {
         Exception e = assertThrows(Exception.class, () -> getPassword(""));
     }
 
     @Test
-    public void shouldThrowCorrectMessageForShortPassword() {
+    public void constructorShouldThrowCorrectMessageForShortPassword() {
         Exception e = assertThrows(Exception.class, () -> getPassword("p123"));
         assertEquals("To short password", e.getMessage());
     }

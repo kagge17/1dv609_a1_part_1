@@ -3,7 +3,7 @@ package com.lab;
 public class BuggySSNHelperAllowMonth0 {
 
     public boolean isCorrectLength(String stringInput) {
-        return stringInput.length() >= 11;
+        return stringInput.length() == 11;
     }
 
     public boolean isCorrectFormat(String stringInput) {
