@@ -37,7 +37,7 @@ public class SwedishSocialSecurityNumberTest {
         assertEquals("900101-0017", ssn.getSSN());
 
         // Verify that the mock methods were called
-        verify(mockHelper).isCorrectLength("900101-0017");
+        verify(mockHelper, times(1)).isCorrectLength("900101-0017");
         verify(mockHelper).isCorrectFormat("900101-0017");
         verify(mockHelper).isValidMonth("01");
         verify(mockHelper).isValidDay("01");

@@ -1,0 +1,14 @@
+package com.examination;
+
+import java.util.List;
+
+public class MyList {
+    
+    public int sum(List<Integer> numbers) {
+        int sum = 0;
+        for (int num : numbers) {
+            sum += num;
+        }
+        return sum;
+    }
+}
